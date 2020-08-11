@@ -2,6 +2,7 @@
 
 require 'view/game/buy_companies'
 require 'view/game/buy_trains'
+require 'view/game/company'
 require 'view/game/corporation'
 require 'view/game/dividend'
 require 'view/game/issue_shares'
@@ -30,7 +31,10 @@ module View
             left << h(BuyTrains)
           end
           left << h(IssueShares) if @current_actions.include?('buy_shares')
-          left << h(Corporation, corporation: entity)
+          left << h(Corporation, corporation: entity) if @game.active_players.include?(entity.owner)
+          if round.current_entity.company? && round.active_entities.one?
+            left << h(Company, company: round.current_entity)
+          end
 
           div_props = {
             style: {

@@ -22,11 +22,7 @@ module Engine
       end
 
       def before_process(action)
-        # this is crap, we should block when this happens
-        return if action.type == 'message' || action.entity == @just_sold_company
-
-        @just_sold_company&.remove_ability_when(:sold)
-        @just_sold_company = nil
+        return if action.type == 'message'
       end
 
       def after_process(action)

@@ -69,6 +69,7 @@ module Engine
         end
 
         @round.just_sold_company = company
+        @round.company_seller = owner
 
         entity.companies << company
         entity.spend(price, owner)
@@ -77,7 +78,7 @@ module Engine
       end
 
       def round_state
-        { just_sold_company: nil }
+        { just_sold_company: nil, company_seller: nil }
       end
 
       def setup
