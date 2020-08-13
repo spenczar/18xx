@@ -18,11 +18,11 @@ module Engine
         @game.payout_companies
         @entities.each { |c| @game.place_home_token(c) } if @home_token_timing == :operating_round
         (@game.corporations + @game.minors + @game.companies).each(&:reset_ability_count_this_or)
-        start_operating unless @entities.empty?
+        after_setup
       end
 
-      def before_process(action)
-        return if action.type == 'message'
+      def after_setup
+        start_operating unless @entities.empty?
       end
 
       def after_process(action)

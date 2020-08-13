@@ -60,7 +60,7 @@ module Engine
         owner.companies.delete(company)
 
         company.abilities(:assign_corporation) do |ability|
-          Assignable.remove_from_all!(@game.corporations, company.id) do |unassigned|
+          Assignable.remove_from_all!(assignable_corporations, company.id) do |unassigned|
             log_later << "#{company.name} is unassigned from #{unassigned.name}" if unassigned.name != entity.name
           end
           entity.assign!(company.id)
@@ -75,6 +75,10 @@ module Engine
         entity.spend(price, owner)
         @log << "#{entity.name} buys #{company.name} from #{owner.name} for #{@game.format_currency(price)}"
         log_later.each { |l| @log << l }
+      end
+
+      def assignable_corporations
+        @game.corporations
       end
 
       def round_state

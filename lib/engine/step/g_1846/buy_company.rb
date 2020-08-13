@@ -10,6 +10,10 @@ module Engine
       class BuyCompany < BuyCompany
         include ReceivershipSkip
 
+        def assignable_corporations
+          @game.corporations + @game.minors
+        end
+
         def room?(entity)
           entity.trains.reject(&:obsolete).size < @game.phase.train_limit
         end

@@ -31,9 +31,26 @@ module View
             left << h(BuyTrains)
           end
           left << h(IssueShares) if @current_actions.include?('buy_shares')
-          left << h(Corporation, corporation: entity) if @game.active_players.include?(entity.owner)
+          if (entity.minor? || entity.corporation?) && @game.active_players.include?(entity.owner)
+            left << h(Corporation, corporation: entity)
+          end
           if round.current_entity.company? && round.active_entities.one?
-            left << h(Company, company: round.current_entity)
+            company = round.current_entity
+
+            left << h(Company, company: company)
+
+            if company.abilities(:assign_corporation)
+              props = {
+                style: {
+                  display: 'inline-block',
+                  verticalAlign: 'top',
+                },
+              }
+
+              @step.assignable_corporations(company).each do |corporation|
+                left << h(:div, props, [h(Corporation, corporation: corporation, selected_company: company)])
+              end
+            end
           end
 
           div_props = {

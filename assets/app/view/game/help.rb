@@ -1,0 +1,17 @@
+# frozen_string_literal: true
+
+module View
+  module Game
+    class Help < Snabberb::Component
+      needs :game
+
+      def render
+        help_text = @game.round.active_step.help
+        return '' if help_text.size.zero?
+
+        help_text_lines = Array(help_text)
+        h('div', help_text_lines.map { |l| h('div', l) })
+      end
+    end
+  end
+end
