@@ -24,8 +24,6 @@ module Engine
         end
 
         def blocking_for_sold_company?
-          just_sold_company = @round.respond_to?(:just_sold_company) && @round.just_sold_company
-
           if (just_sold_company = @round.respond_to?(:just_sold_company) && @round.just_sold_company)
             if just_sold_company.abilities(:tile_lay, 'sold')
               @company = just_sold_company
