@@ -31,7 +31,7 @@ module View
             left << h(BuyTrains)
           end
           left << h(IssueShares) if @current_actions.include?('buy_shares')
-          if (entity.minor? || entity.corporation?) && @game.active_players.include?(entity.owner)
+          if entity.operator? && @game.active_players.include?(entity.owner)
             left << h(Corporation, corporation: entity)
           end
           if round.current_entity.company? && round.active_entities.one?

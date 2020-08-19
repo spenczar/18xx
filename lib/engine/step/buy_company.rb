@@ -77,8 +77,8 @@ module Engine
         log_later.each { |l| @log << l }
       end
 
-      def assignable_corporations
-        @game.corporations
+      def assignable_corporations(company = nil)
+        @game.corporations(company)
       end
 
       def round_state

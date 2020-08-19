@@ -10,7 +10,7 @@ module Engine
       class BuyCompany < BuyCompany
         include ReceivershipSkip
 
-        def assignable_corporations
+        def assignable_corporations(company = nil)
           @game.corporations + @game.minors
         end
 

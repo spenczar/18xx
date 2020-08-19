@@ -9,8 +9,7 @@ module View
         help_text = @game.round.active_step.help
         return '' if help_text.size.zero?
 
-        help_text_lines = Array(help_text)
-        h('div', help_text_lines.map { |l| h('div', l) })
+        h('div', Array(help_text).map { |l| h('div', l) })
       end
     end
   end
