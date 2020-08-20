@@ -26,11 +26,11 @@ module Engine
         def dividend_options(entity)
           return super unless civil_war_effect_with_single_train?(entity)
 
-          { withhold: { company: 0, per_share: 0 } }
+          { withhold: { company: 0, per_share: 0, divs_to_company: 0 } }
         end
 
         def log_run_payout(entity, kind, revenue, action, payout)
-          super unless civil_war_effect_with_single_train?(entity)
+          return super unless civil_war_effect_with_single_train?(entity)
 
           @log << "#{entity.name}'s run is ignored due to Civil War"
         end

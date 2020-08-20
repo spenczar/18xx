@@ -18,6 +18,8 @@ module Engine
       GAME_END_CHECK = { bankrupt: :immediate, stock_market: :current_or, bank: :current_or }.freeze
 
       STATUS_TEXT = Base::STATUS_TEXT.merge(
+        'can_buy_companies_from_other_players' => ['Interplayer Company Buy', 'Companies can be bought between players']
+      ).merge(
         Step::SingleDepotTrainBuyBeforePhase4::STATUS_TEXT
       ).freeze
 
@@ -33,6 +35,7 @@ module Engine
           logo: 'open_city',
           tokens: [0, 0],
         )
+        neutral.owner = @bank
 
         neutral.tokens.each { |token| token.type = :neutral }
 
@@ -52,6 +55,7 @@ module Engine
           Step::DiscardTrain,
           Step::BuyCompany,
           Step::HomeToken,
+          Step::SpecialTrack,
           Step::G18GA::Track,
           Step::Token,
           Step::Route,

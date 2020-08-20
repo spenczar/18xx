@@ -204,6 +204,7 @@ module Engine
             },
             {
                "type":"tile_lay",
+               "free":true,
                "owner_type":"corporation",
                "hexes":[
                   "F12"
@@ -593,6 +594,7 @@ module Engine
          ],
          "operating_rounds":1,
          "status":[
+            "can_buy_companies_from_other_players",
             "limited_train_buy"
          ]
       },
@@ -607,6 +609,7 @@ module Engine
          "operating_rounds":2,
          "status":[
             "can_buy_companies",
+            "can_buy_companies_from_other_players",
             "limited_train_buy"
          ]
       },
@@ -620,7 +623,8 @@ module Engine
          ],
          "operating_rounds":2,
          "status":[
-            "can_buy_companies"
+            "can_buy_companies",
+            "can_buy_companies_from_other_players"
          ]
       },
       {
