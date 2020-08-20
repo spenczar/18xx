@@ -326,7 +326,6 @@ module Engine
           Step::SpecialToken,
           Step::SpecialTrack,
           Step::G1846::BuyCompany,
-          Step::G1846::AssignSteamboat,
           Step::G1846::IssueShares,
           Step::G1846::TrackAndToken,
           Step::Route,

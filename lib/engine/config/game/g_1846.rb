@@ -249,7 +249,7 @@ module Engine
       "name": "Steamboat Company",
       "value": 40,
       "revenue": 10,
-      "desc": "At the beginning of each Operating Round, the owning player may assign the Steamboat Company to a corporation/minor and to a port location (B8, C5, D14, G19, I1). Once per game, the owning corporation may assign the Steamboat Company to a port location. Add $20 per port symbol to all routes run to the assigned location by the owning/assigned corporation/minor.",
+      "desc": "At the beginning of each Operating Round, the owning player may assign the Steamboat Company to a corporation/minor and to a port location (B8, C5, D14, G19, I1). Once per Operating Round, the owning corporation may assign the Steamboat Company to a port location. Add $20 per port symbol to all routes run to the assigned location by the owning/assigned corporation/minor.",
       "sym": "SC",
       "abilities": [
         {
@@ -278,7 +278,7 @@ module Engine
             "I1",
             "G19"
           ],
-          "count": 1,
+          "count_per_or": 1,
           "owner_type": "corporation"
         },
         {

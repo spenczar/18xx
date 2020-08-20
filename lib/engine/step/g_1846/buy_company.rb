@@ -10,8 +10,8 @@ module Engine
       class BuyCompany < BuyCompany
         include ReceivershipSkip
 
-        def assignable_corporations(_company = nil)
-          @game.corporations + @game.minors
+        def assignable_corporations(company = nil)
+          (@game.corporations + @game.minors).reject { |c| c.assigned?(company&.id) }
         end
 
         def room?(entity)

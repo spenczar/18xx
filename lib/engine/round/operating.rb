@@ -17,7 +17,7 @@ module Engine
         @home_token_timing = @game.class::HOME_TOKEN_TIMING
         @game.payout_companies
         @entities.each { |c| @game.place_home_token(c) } if @home_token_timing == :operating_round
-        (@game.corporations + @game.minors + @game.companies).each(&:reset_ability_count_this_or)
+        (@game.corporations + @game.minors + @game.companies).each(&:reset_ability_count_this_or!)
         after_setup
       end
 
@@ -71,6 +71,10 @@ module Engine
 
       def teleported?(entity)
         entity.abilities(:teleport)&.find(&:used?)
+      end
+
+      def operating?
+        true
       end
     end
   end

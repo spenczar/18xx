@@ -137,6 +137,10 @@ module Engine
         @active_step = nil
       end
 
+      def operating?
+        false
+      end
+
       private
 
       def skip_steps

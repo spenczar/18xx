@@ -49,7 +49,7 @@ module Engine
       end
 
       def assignable_corporations(company = nil)
-        @game.corporations.select { |c| c.floated && !c.assigned?(company&.id) }
+        @game.corporations.select { |c| c.floated? && !c.assigned?(company&.id) }
       end
 
       def available_hex(entity, hex)

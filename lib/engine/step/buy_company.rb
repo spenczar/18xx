@@ -66,6 +66,13 @@ module Engine
           entity.assign!(company.id)
           ability.use!
           log_later << "#{company.name} is assigned to #{entity.name}"
+
+          log_later <<
+            if (assigned_hex = @game.hexes.find { |h| h.assigned?(company.id) })
+              "#{company.name} is still assigned to #{assigned_hex.name}"
+            else
+              "#{company.name} is not assigned to a hex"
+            end
         end
 
         @round.just_sold_company = company
