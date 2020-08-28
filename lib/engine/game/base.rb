@@ -31,9 +31,9 @@ module Engine
   module Game
     class Base
       attr_reader :actions, :bank, :cert_limit, :cities, :companies, :corporations,
-                  :depot, :finished, :graph, :hexes, :id, :loading, :log, :minors, :phase, :players, :operating_rounds,
-                  :round, :share_pool, :stock_market, :tiles, :turn, :undo_possible, :redo_possible,
-                  :round_history, :all_tiles
+                  :depot, :finished, :graph, :hexes, :id, :loading, :loans, :log, :minors,
+                  :phase, :players, :operating_rounds, :round, :share_pool, :stock_market,
+                  :tiles, :turn, :total_loans, :undo_possible, :redo_possible, :round_history, :all_tiles
 
       DEV_STAGES = %i[production beta alpha prealpha].freeze
       DEV_STAGE = :prealpha
@@ -102,6 +102,7 @@ module Engine
       # down_block -- down one row per block
       # left_block_pres -- left one column per block if president
       # left_block -- one row per block
+      # none -- don't drop price
       SELL_MOVEMENT = :down_share
 
       # :sell_buy_or_buy_sell
@@ -164,6 +165,7 @@ module Engine
         %i[share_prices share_price],
         %i[cities city],
         %i[minors minor],
+        %i[loans loan],
       ].freeze
 
       # https://en.wikipedia.org/wiki/Linear_congruential_generator#Parameters_in_common_use
@@ -290,6 +292,8 @@ module Engine
         @companies = init_companies(@players)
         @stock_market = init_stock_market
         @minors = init_minors
+        @loans = init_loans
+        @total_loans = @loans.size
         @corporations = init_corporations(@stock_market)
         @bank = init_bank
         @tiles = init_tiles
@@ -538,10 +542,12 @@ module Engine
           bundle.num_shares.times { @stock_market.move_down(corporation) }
         when :left_block_pres
           stock_market.move_left(corporation) if was_president
+        when :none
+          nil
         else
           raise NotImplementedError
         end
-        log_share_price(corporation, price)
+        log_share_price(corporation, price) if self.class::SELL_MOVEMENT != :none
       end
 
       def log_share_price(entity, from)
@@ -769,6 +775,18 @@ module Engine
 
       def init_minors
         self.class::MINORS.map { |minor| Minor.new(**minor) }
+      end
+
+      def init_loans
+        []
+      end
+
+      def loans_taken
+        @total_loans - @loans.size
+      end
+
+      def maximum_loans(_entity)
+        0
       end
 
       def init_corporations(stock_market)
@@ -1110,7 +1128,7 @@ module Engine
         @players.any?(&:bankrupt)
       end
 
-      def all_potential_upgrades(tile)
+      def all_potential_upgrades(tile, tile_manifest: false) # rubocop:disable Lint/UnusedMethodArgument
         colors = Array(@phase.phases.last[:tiles])
         @all_tiles
           .select { |t| colors.include?(t.color) }
@@ -1118,6 +1136,8 @@ module Engine
           .select { |t| upgrades_to?(tile, t) }
           .reject(&:blocks_lay)
       end
+
+      def interest_rate; end
     end
   end
 end

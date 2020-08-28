@@ -4,11 +4,12 @@ require 'view/game/buy_companies'
 require 'view/game/buy_trains'
 require 'view/game/company'
 require 'view/game/corporation'
+require 'view/game/player'
 require 'view/game/dividend'
 require 'view/game/issue_shares'
 require 'view/game/map'
-require 'view/game/undo_and_pass'
 require 'view/game/route_selector'
+require 'view/game/cash_crisis'
 
 module View
   module Game
@@ -19,19 +20,28 @@ module View
         def render
           round = @game.round
           @step = round.active_step
-          entity = round.current_entity
+          entity = @step.current_entity
           @current_actions = round.actions_for(entity)
           entity = entity.owner if entity.company?
 
           left = []
           left << h(RouteSelector) if @current_actions.include?('run_routes')
           left << h(Dividend) if @current_actions.include?('dividend')
+
           if @current_actions.include?('buy_train')
             left << h(IssueShares) if @current_actions.include?('sell_shares')
             left << h(BuyTrains)
+          elsif @current_actions.include?('sell_shares') && entity.player?
+            left << h(CashCrisis)
           end
           left << h(IssueShares) if @current_actions.include?('buy_shares')
-          left << h(Corporation, corporation: entity) if entity.operator? && @game.active_players.include?(entity.owner)
+
+          if entity.player?
+            left << h(Player, player: entity, game: @game)
+          elsif entity.operator? && @game.active_players.include?(entity.owner)
+            left << h(Corporation, corporation: entity)
+          end
+
           if round.current_entity.company? && round.active_entities.one?
             company = round.current_entity
 

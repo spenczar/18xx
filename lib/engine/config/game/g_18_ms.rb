@@ -11,7 +11,7 @@ module Engine
    "filename":"18_ms",
    "modulename":"18MS",
    "currencyFormatStr":"$%d",
-   "bankCash":6000,
+   "bankCash":10000,
    "certLimit":{
       "2":20,
       "3":14,
@@ -41,22 +41,23 @@ module Engine
       "E5":"Meridian",
       "E9":"Selma",
       "E11":"Montgomery",
+      "E13":"Atlanta",
       "G3":"Hattiesburg",
       "H4":"Gulfport",
       "H6":"Mobile",
       "H8":"Pensacola",
       "H10":"Tallahassee",
-      "I1":"New Orleans"
+      "I1":"New Orleans",
+      "I3":"Port Sulphur"
    },
    "tiles":{
-      "1":1,
       "3":3,
       "4":3,
       "5":2,
       "6":3,
       "7":4,
-      "8":9,
-      "9":9,
+      "8":10,
+      "9":10,
       "57":3,
       "58":3,
       "14":3,
@@ -87,13 +88,13 @@ module Engine
       "63":4,
       "446":{
          "count":1,
-         "color":"brown",
-         "code":"city=revenue:50,slots:3;path=a:0,b:_0;path=a:1,b:_0;path=a:2,b:_0;path=a:3,b:_0"
-      },
-      "X31":{
-         "count":1,
          "color":"gray",
-         "code":"city=revenue:70,slots:3;path=a:0,b:_0;path=a:1,b:_0;path=a:2,b:_0;path=a:3,b:_0;path=a:4,b:_0;path=a:5,b:_0"
+         "code":"city=revenue:70,slots:3;path=a:0,b:_0;path=a:1,b:_0;path=a:2,b:_0;path=a:3,b:_0;path=a:4,b:_0;path=a:5,b:_0;label=BM"
+      },
+      "X31b":{
+         "count":1,
+         "color":"brown",
+         "code":"city=revenue:50,slots:3;path=a:0,b:_0;path=a:1,b:_0;path=a:2,b:_0;path=a:3,b:_0;label=Mob"
       }
    },
    "market":[
@@ -184,7 +185,7 @@ module Engine
          "name":"Mississippi Central Railway",
          "value":60,
          "revenue":5,
-         "desc":"Converts to a 2+ train with no salvage value when placed in a Major Company.",
+         "desc":"Converts to a 2+ train that cannot be salvaged when placed in a Major Company.",
          "sym":"MC"
       },
       {
@@ -211,6 +212,7 @@ module Engine
    "corporations":[
       {
          "float_percent":60,
+         "max_ownership_percent":70,
          "sym":"GMO",
          "name":"Gulf, Mobile and Ohio Railroad",
          "logo":"18_ms/GMO",
@@ -225,6 +227,7 @@ module Engine
       },
       {
          "float_percent":60,
+         "max_ownership_percent":70,
          "sym":"IC",
          "name":"Illinois Central Railroad",
          "logo":"18_ms/IC",
@@ -238,6 +241,7 @@ module Engine
       },
       {
          "float_percent":60,
+         "max_ownership_percent":70,
          "sym":"L&N",
          "name":"Louisville and Nashville Railroad",
          "logo":"18_ms/LN",
@@ -251,6 +255,7 @@ module Engine
       },
       {
          "float_percent":60,
+         "max_ownership_percent":70,
          "sym":"Fr",
          "name":"Frisco",
          "logo":"18_ms/Fr",
@@ -264,6 +269,7 @@ module Engine
       },
       {
          "float_percent":60,
+         "max_ownership_percent":70,
          "sym":"WRA",
          "name":"Western Railway of Alabama",
          "logo":"18_ms/WRA",
@@ -284,8 +290,7 @@ module Engine
             {
                "nodes":[
                   "city",
-                  "offboard",
-                  "town"
+                  "offboard"
                ],
                "pay":2,
                "visit":2
@@ -307,8 +312,7 @@ module Engine
             {
                "nodes":[
                   "city",
-                  "offboard",
-                  "town"
+                  "offboard"
                ],
                "pay":3,
                "visit":3
@@ -330,8 +334,7 @@ module Engine
             {
                "nodes":[
                   "city",
-                  "offboard",
-                  "town"
+                  "offboard"
                ],
                "pay":4,
                "visit":4
@@ -351,16 +354,16 @@ module Engine
          "name":"5",
          "distance":5,
          "price":500,
-         "num":2,
-         "events":[
-           {"type": "close_companies"}
-         ]
+         "num":2
       },
       {
          "name":"6",
          "distance":6,
          "price":550,
-         "num":2
+         "num":2,
+         "events":[
+           {"type": "close_companies"}
+         ]
       },
       {
          "name":"2D",
@@ -371,19 +374,15 @@ module Engine
          "variants":[
             {
                "name":"4D",
-               "distance":[
-                  {
-                     "distance":4,
-                     "price":750,
-                     "available_on":"6"
-                  }
-               ]
+               "price":750,
+               "available_on":"6",
+               "distance":4
             }
          ]
       },
       {
          "name":"5D",
-         "distance":8,
+         "distance":5,
          "price":850,
          "num":1,
          "available_on":"6"
@@ -450,25 +449,28 @@ module Engine
          "city=revenue:yellow_40|brown_50;path=a:5,b:_0;path=a:4,b:_0":[
             "A1"
          ],
-         "city=revenue:yellow_51|brown_50;path=a:3,b:_0;path=a:4,b:_0":[
+         "city=revenue:yellow_50|brown_80;path=a:3,b:_0;path=a:4,b:_0":[
             "I1"
-         ],
-         "town=revenue:10":[
-            "I3"
          ],
          "path=a:1,b:5":[
             "A3"
          ],
-         "path=a:0,b:5":[
+         "offboard=revenue:yellow_40|brown_50,hide:1,groups:Atlanta;path=a:0,b:_0;border=edge:5":[
             "D12"
          ],
-         "path=a:2,b:3":[
+         "offboard=revenue:yellow_40|brown_50,groups:Atlanta;path=a:1,b:_0;border=edge:2;border=edge:0":[
+            "E13"
+         ],
+         "offboard=revenue:yellow_40|brown_50,hide:1,groups:Atlanta;path=a:2,b:_0;border=edge:3":[
             "F12"
          ]
       },
       "gray":{
          "city=revenue:yellow_30|brown_60,slots:2;path=a:3,b:_0;path=a:4,b:_0;path=a:5,b:_0":[
             "E1"
+         ],
+         "town=revenue:10;path=a:1,b:_0":[
+            "I3"
          ]
       }
    },
@@ -481,12 +483,11 @@ module Engine
          ],
          "operating_rounds":2,
          "status":[
-            "can_buy_companies"
+            "can_buy_companies_operation_round_one"
          ]
       },
       {
          "name":"3",
-         "on":"3",
          "train_limit":3,
          "tiles":[
             "yellow",
@@ -496,30 +497,6 @@ module Engine
          "status":[
             "can_buy_companies"
          ]
-      },
-      {
-         "name":"4",
-         "on":"4",
-         "train_limit":3,
-         "tiles":[
-            "yellow",
-            "green"
-         ],
-         "operating_rounds":2,
-         "status":[
-            "can_buy_companies"
-         ]
-      },
-      {
-         "name":"5",
-         "on":"5",
-         "train_limit":3,
-         "tiles":[
-            "yellow",
-            "green",
-            "brown"
-         ],
-         "operating_rounds":2
       },
       {
          "name":"6",
