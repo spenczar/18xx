@@ -454,7 +454,8 @@ module Engine
       let(:game) { Game::G1846.new(players) }
       let(:corporation) { game.corporation_by_id('B&O') }
       let(:corporation_1) { game.corporation_by_id('PRR') }
-      let(:minor) { game.minor_by_id('MS') }
+      let(:big4) { game.minor_by_id('BIG4') }
+      let(:ms) { game.minor_by_id('MS') }
       let(:company) { game.company_by_id('SC') }
       let(:hex_b8) { game.hex_by_id('B8') }
       let(:hex_d14) { game.hex_by_id('D14') }
@@ -467,6 +468,9 @@ module Engine
         corporation.cash = 80
         corporation.owner = game.players.first
         company.owner = game.players.first
+
+        ms.owner = game.players[1]
+        big4.owner = game.players[2]
       end
 
       describe 'Steamboat Company' do
@@ -492,10 +496,10 @@ module Engine
 
           subject = goto_new_or!
 
-          subject.process_action(Action::Assign.new(company, target: minor))
+          subject.process_action(Action::Assign.new(company, target: ms))
           expect(company).not_to be_assigned_to(corporation)
           expect(company).not_to be_assigned_to(corporation_1)
-          expect(company).to be_assigned_to(minor)
+          expect(company).to be_assigned_to(ms)
 
           subject = goto_new_or!
 
@@ -505,7 +509,7 @@ module Engine
 
           subject.process_action(Action::Assign.new(company, target: corporation_1))
           expect(company).not_to be_assigned_to(corporation)
-          expect(company).not_to be_assigned_to(minor)
+          expect(company).not_to be_assigned_to(ms)
           expect(company).to be_assigned_to(corporation_1)
 
           subject.process_action(
@@ -540,11 +544,11 @@ module Engine
           expect(company).not_to be_assigned_to(corporation_1)
           expect(company).not_to be_assigned_to(hex_g19)
 
-          action = Action::Assign.new(company, target: hex_g19)
-          expect { subject.process_action(action) }.to raise_error GameError
-
           action = Action::Assign.new(company, target: corporation_1)
           expect { subject.process_action(action) }.to raise_error GameError
+
+          subject.process_action(Action::Assign.new(company, target: hex_g19))
+          expect(company).to be_assigned_to(hex_g19)
         end
       end
     end
