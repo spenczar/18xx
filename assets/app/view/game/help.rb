@@ -6,7 +6,7 @@ module View
       needs :game
 
       def render
-        help_text = @game.round.active_step.help
+        help_text = @game.round.active_step&.help || ''
         return '' if help_text.size.zero?
 
         h('div', Array(help_text).map { |l| h('div', l) })
