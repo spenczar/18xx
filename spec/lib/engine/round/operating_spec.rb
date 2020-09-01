@@ -245,8 +245,6 @@ module Engine
         it 'can lay a tile' do
           expect(subject.active_step).to be_a Engine::Step::BuyTrain
 
-          train = subject.active_step.buyable_trains(corporation).first
-
           expect(game.active_players).to eq([game.players[0]])
 
           subject.process_action(
