@@ -22,7 +22,8 @@ module View
           @step = round.active_step
           entity = @step.current_entity
           @current_actions = round.actions_for(entity)
-          entity = entity.owner if entity.company?
+
+          entity = entity.owner if entity.company? && !round.active_entities.one?
 
           left = []
           left << h(RouteSelector) if @current_actions.include?('run_routes')
@@ -36,15 +37,12 @@ module View
           end
           left << h(IssueShares) if @current_actions.include?('buy_shares')
           left << h(Loans, corporation: entity) if (%w[take_loan payoff_loan] & @current_actions).any?
-          left << if entity.player?
-                    h(Player, player: entity, game: @game)
-                  else
-                    h(Corporation, corporation: entity)
-                  end
 
-          if round.current_entity.company? && round.active_entities.one?
-            company = round.current_entity
-
+          if entity.player?
+            left << h(Player, player: entity, game: @game)
+          elsif entity.corporation?
+            left << h(Corporation, corporation: entity)
+          elsif (company = entity).company?
             left << h(Company, company: company)
 
             if company.abilities(:assign_corporation)
