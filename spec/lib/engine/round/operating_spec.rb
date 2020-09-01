@@ -73,6 +73,7 @@ module Engine
     context '#1889' do
       let(:corporation) { game.corporation_by_id('AR') }
       let(:corporation2) { game.corporation_by_id('SR') }
+      let(:ehime) { game.company_by_id('ER') }
       subject { move_to_or! }
 
       before :each do
@@ -232,6 +233,68 @@ module Engine
             fake_buy_train(train, corporation)
             expect { subject.process_action(action) }.to raise_error GameError
           end
+        end
+      end
+
+      describe 'blocking for Ehime Railway' do
+        before :each do
+          ehime.owner = game.players[1]
+          game.phase.next!
+        end
+
+        it 'can lay a tile' do
+          expect(subject.active_step).to be_a Engine::Step::BuyTrain
+
+          train = subject.active_step.buyable_trains(corporation).first
+
+          expect(game.active_players).to eq([game.players[0]])
+
+          subject.process_action(
+            Action::BuyCompany.new(
+              corporation,
+              company: ehime,
+              price: 40,
+            )
+          )
+
+          expect(game.active_players).to eq([game.players[1]])
+          expect(subject.active_step).to be_a Engine::Step::G1889::SpecialTrack
+
+          action = Action::LayTile.new(ehime, tile: game.tile_by_id('14-0'), hex: game.hex_by_id('C4'), rotation: 1)
+          subject.process_action(action)
+
+          expect(subject.active_step).to be_a Engine::Step::BuyTrain
+          expect(game.active_players).to eq([game.players[0]])
+          expect(subject.active_entities).to eq([corporation])
+        end
+
+        it 'requires a pass action if not laying' do
+          expect(subject.active_step).to be_a Engine::Step::BuyTrain
+
+          train = subject.active_step.buyable_trains(corporation).first
+
+          expect(game.active_players).to eq([game.players[0]])
+
+          subject.process_action(
+            Action::BuyCompany.new(
+              corporation,
+              company: ehime,
+              price: 40,
+            )
+          )
+
+          expect(game.active_players).to eq([game.players[1]])
+          expect(subject.active_step).to be_a Engine::Step::G1889::SpecialTrack
+
+          action = Action::BuyTrain.new(corporation, train: train, price: train.price)
+          expect { subject.process_action(action) }.to raise_error(GameError)
+
+          action = Action::Pass.new(ehime)
+          subject.process_action(action)
+
+          expect(subject.active_step).to be_a Engine::Step::BuyTrain
+          expect(game.active_players).to eq([game.players[0]])
+          expect(subject.active_entities).to eq([corporation])
         end
       end
     end
