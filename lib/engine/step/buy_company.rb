@@ -85,7 +85,7 @@ module Engine
       end
 
       def assignable_corporations(company = nil)
-        @game.corporations(company)
+        @game.corporations
       end
 
       def round_state
