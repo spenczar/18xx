@@ -942,6 +942,11 @@ module Engine
         @operating_rounds if @round.is_a?(Round::Operating)
       end
 
+      def trains_phase_out?
+        # Return true iff trains phase out in this game
+        self.trains.any? {|train| train.obsolete_on}
+      end
+
       def next_round!
         if (_, after = game_end_check)
           return end_game! if end_now?(after)

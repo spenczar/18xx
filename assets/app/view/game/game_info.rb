@@ -149,16 +149,22 @@ module View
             end
           end
 
-          h(:tr, [
+          cells = [
             h(:td, names_to_prices.keys.join(', ')),
             h('td.right', names_to_prices.values.map { |p| @game.format_currency(p) }.join(', ')),
             h(:td, trains.size),
-            h(:td, obsolete_schedule[name]&.join(', ') || 'None'),
+          ]
+          if @game.trains_phase_out?
+            cells.append(h(:td, obsolete_schedule[name]&.join(', ') || 'None'))
+          end
+          cells.append(
             h(:td, rust_schedule[name]&.join(', ') || 'None'),
             h(:td, discounts&.join(' ')),
             h(:td, train.available_on),
             h(:td, event_text.join(', ')),
-          ])
+          )
+          h(:tr, cells)
+
         end
 
         event_text = @game.class::EVENTS_TEXT.map do |_sym, desc|
@@ -177,21 +183,26 @@ module View
           ])]
         end
 
+        headers = [
+          h(:th, 'Type'),
+          h(:th, 'Price'),
+          h(:th, 'Remaining'),
+        ]
+        if @game.trains_phase_out?
+          headers.append(h(:th, 'Phases out'))
+        end
+        headers.append(
+          h(:th, 'Rusts'),
+          h(:th, 'Upgrade Discount'),
+          h(:th, { attrs: { title: 'Available after purchase of first train of type' } }, 'Available'),
+          h(:th, 'Events'),
+        )
         [
           h(:h3, 'Upcoming Trains'),
           h(:div, { style: { overflowX: 'auto' } }, [
             h(:table, [
               h(:thead, [
-                h(:tr, [
-                  h(:th, 'Type'),
-                  h(:th, 'Price'),
-                  h(:th, 'Remaining'),
-                  h(:th, 'Phases out'),
-                  h(:th, 'Rusts'),
-                  h(:th, 'Upgrade Discount'),
-                  h(:th, { attrs: { title: 'Available after purchase of first train of type' } }, 'Available'),
-                  h(:th, 'Events'),
-                ]),
+                h(:tr, headers),
               ]),
               h('tbody.zebra', rows),
             ]),
