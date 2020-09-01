@@ -35,12 +35,12 @@ module View
             left << h(CashCrisis)
           end
           left << h(IssueShares) if @current_actions.include?('buy_shares')
-
-          if entity.player?
-            left << h(Player, player: entity, game: @game)
-          elsif entity.operator? && @game.active_players.include?(entity.owner)
-            left << h(Corporation, corporation: entity)
-          end
+          left << h(Loans, corporation: entity) if (%w[take_loan payoff_loan] & @current_actions).any?
+          left << if entity.player?
+                    h(Player, player: entity, game: @game)
+                  else
+                    h(Corporation, corporation: entity)
+                  end
 
           if round.current_entity.company? && round.active_entities.one?
             company = round.current_entity
